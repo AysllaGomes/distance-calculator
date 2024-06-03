@@ -78,4 +78,6 @@ jmeter.log
 
 dist/
 
+.env
+
 test-report.xml
