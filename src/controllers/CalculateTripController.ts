@@ -13,6 +13,19 @@ interface CalculateTripRequest {
     departureDate: string; // DD.MM.YYYY
 }
 
+// curl --location 'localhost:3000/calculate-trip' \
+// --header 'Content-Type: application/json' \
+// --data '{
+//   "origin": "Planaltina,GO",
+//   "destination": "Conceição da Aparecida,MG",
+//   "fuelConsumption": 5.8,
+//   "fuelPrice": 5.80,
+//   "averageSpeed": 150,
+//   "drivingStartTime": "09:00",
+//   "drivingEndTime": "18:00",
+//   "departureDate": "04.06.2024"
+// }'
+
 export class CalculateTripController {
     public async calculateTrip(req: Request, res: Response, next: NextFunction) {
         const {
