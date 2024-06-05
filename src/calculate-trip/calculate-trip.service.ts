@@ -7,25 +7,37 @@ import { CalculateTripParamsDto } from './dto/calculate-trip-params.dto';
 
 @Injectable()
 export class CalculateTripService {
-    public googleMapsService: GoogleMapsService = new GoogleMapsService();
+    protected googleMapsService: GoogleMapsService = new GoogleMapsService();
 
     async calculateTrip(params: CalculateTripParamsDto): Promise<CalculateTripDto> {
         try {
             const { origin, destination, fuelConsumption, fuelPrice, averageSpeed, drivingStartTime, drivingEndTime, departureDate, apiKey } = params;
-            const { distance, duration } = await this.googleMapsService.getDistance(origin, destination, apiKey);
+            const { distance } = await this.googleMapsService.getDistance(origin, destination, apiKey);
 
-            const distanceInKm = parseFloat(distance.replace(' km', '').replace(',', '.'));
-            const durationInHours = parseFloat(duration.replace(' hours', '').replace(',', '.'));
+            const distanceInKm: number = parseFloat(distance.replace(' km', '').replace(',', '.'));
+            const drivingTimeInHours: number = distanceInKm / averageSpeed;
 
-            const drivingTimeInHours = distanceInKm / averageSpeed;
-            const breaks = Math.ceil(drivingTimeInHours / ((new Date(`1970-01-01T${drivingEndTime}:00Z`).getHours()) - (new Date(`1970-01-01T${drivingStartTime}:00Z`).getHours())));
-            const totalTravelTimeInHours = drivingTimeInHours + (breaks * 15 / 60); // considerando cada intervalo de 15 minutos
+            const drivingStart: Date = new Date(`1970-01-01T${drivingStartTime}:00Z`);
+            const drivingEnd: Date = new Date(`1970-01-01T${drivingEndTime}:00Z`);
+            const drivingIntervalHours: number = (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
 
-            const departure = new Date(departureDate);
-            const arrivalTime = new Date(departure.getTime() + (totalTravelTimeInHours * 60 * 60 * 1000));
+            // Calcular o número de dias necessários
+            const daysNeeded: number = Math.ceil(drivingTimeInHours / drivingIntervalHours);
 
-            const fuelNeeded = distanceInKm / fuelConsumption;
-            const tripCost = fuelNeeded * fuelPrice;
+            // Calcular o número de pausas necessárias
+            // Um intervalo de descanso após cada dia de condução
+            const breaks: number = daysNeeded - 1;
+
+            // Calcular o tempo total de viagem incluindo pausas
+            // considerando cada intervalo de 1 hora
+            const totalTravelTimeInHours: number = drivingTimeInHours + (breaks);
+
+            const departure: Date = new Date(departureDate);
+            // Data e hora de partida (departureDate) somada ao tempo total da viagem (incluindo pausas):
+            const arrivalTime: Date = new Date(departure.getTime() + (totalTravelTimeInHours * 60 * 60 * 1000));
+
+            const fuelNeeded: number = distanceInKm / fuelConsumption;
+            const tripCost: number = fuelNeeded * fuelPrice;
 
             return {
                 distanceInKm,
