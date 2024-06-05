@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "207327fc-b7e3-4430-98e8-71bf7033f47f",
+		"name": "Distance Calculator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3224041",
+		"_collection_link": "https://universal-workspace.postman.co/workspace/Natura~80f4d357-4efc-42f9-986e-5b2ba53d9a14/collection/3224041-207327fc-b7e3-4430-98e8-71bf7033f47f?action=share&source=collection_link&creator=3224041"
+	},
+	"item": [
+		{
+			"name": "Calculate Trip",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"origin\": \"Conceição da Aparecida, Minas Gerais, Brasil\",\r\n    \"destination\": \"Planaltina, Goiás, Brasil\",\r\n    \"fuelConsumption\": 14,\r\n    \"fuelPrice\": 5.80,\r\n    \"averageSpeed\": 77,\r\n    \"drivingStartTime\": \"09:00\",\r\n    \"drivingEndTime\": \"18:00\",\r\n    \"departureDate\": \"2024-06-06\",\r\n    \"apiKey\": \"{{api_key_google}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/calculate-trip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"calculate-trip"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

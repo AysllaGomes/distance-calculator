@@ -1,4 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
+
+import { CalculateTripDto } from './dto/calculate-trip.dto';
+
 import { CalculateTripService } from './calculate-trip.service';
 
 @Controller('calculate-trip')
@@ -8,7 +11,7 @@ export class CalculateTripController {
     ) {}
 
     @Post()
-    async calculateTrip(@Body() requestData: any) {
+    async calculateTrip(@Body() requestData: any): Promise<CalculateTripDto> {
         const {
             origin,
             destination,

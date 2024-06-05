@@ -1,26 +1,18 @@
-import axios from 'axios';
 import { Injectable } from '@nestjs/common';
 
-interface CalculateTripParams {
-    origin: string;
-    destination: string;
-    fuelConsumption: number;
-    fuelPrice: number;
-    averageSpeed: number;
-    drivingStartTime: string;
-    drivingEndTime: string;
-    departureDate: string;
-    apiKey: string;
-}
+import { GoogleMapsService } from '../google-maps/google-maps.service';
+
+import { CalculateTripDto } from './dto/calculate-trip.dto';
+import { CalculateTripParamsDto } from './dto/calculate-trip-params.dto';
 
 @Injectable()
 export class CalculateTripService {
-    constructor() {}
+    public googleMapsService: GoogleMapsService = new GoogleMapsService();
 
-    async calculateTrip(params: CalculateTripParams) {
+    async calculateTrip(params: CalculateTripParamsDto): Promise<CalculateTripDto> {
         try {
             const { origin, destination, fuelConsumption, fuelPrice, averageSpeed, drivingStartTime, drivingEndTime, departureDate, apiKey } = params;
-            const { distance, duration } = await this.getDistance(origin, destination, apiKey);
+            const { distance, duration } = await this.googleMapsService.getDistance(origin, destination, apiKey);
 
             const distanceInKm = parseFloat(distance.replace(' km', '').replace(',', '.'));
             const durationInHours = parseFloat(duration.replace(' hours', '').replace(',', '.'));
@@ -45,26 +37,6 @@ export class CalculateTripService {
             };
         } catch (error) {
             throw new Error(`Erro ao calcular a viagem: ${error.message}`);
-        }
-    }
-
-    private async getDistance(origin: string, destination: string, apiKey: string) {
-        try {
-            const response = await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
-                params: {
-                    origins: origin,
-                    destinations: destination,
-                    key: apiKey
-                }
-            });
-
-            const data = response.data;
-            const distance = data.rows[0].elements[0].distance.text;
-            const duration = data.rows[0].elements[0].duration.text;
-
-            return { distance, duration };
-        } catch (error) {
-            throw new Error(`Erro ao obter a distância: ${error.message}`);
         }
     }
 }
