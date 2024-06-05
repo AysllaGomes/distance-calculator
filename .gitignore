@@ -1,30 +1,23 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
 # compiled output
 /dist
-/tmp
-/out-tsc
-/data
-/k8s/data
-/CachedData
-/User
-/logs
-/Cache
-/GPUCache
-/CachedExtensions
-/Backups
-/Local Storage
-/log
-/libs
+/node_modules
+/build
 
-# Database Local
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-/bd_Data
-/metabase-data
+# OS
+.DS_Store
 
-# dependencies
-node_modules/
-package-lock.json
+# Tests
+/coverage
+/.nyc_output
 
 # IDEs and editors
 /.idea
@@ -42,42 +35,22 @@ package-lock.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# jest coverage
-# /coverage
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-.npmrc
-.old.npmrc
-/Workspaces
-workspace.json
-
-# System Files
-.DS_Store
-Thumbs.db
-
-# Test files - executions
-D2018*
-jmeter.log
-
-# Sonar - Static Analysis
-.scannerwork
-/node_modules/
-./node_modules/
-../node_modules/
-/dist/
-/.vscode/
-/.bbdev/
-
-dist/
-
+# dotenv environment variable files
 .env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
-test-report.xml
+# temp directory
+.temp
+.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
