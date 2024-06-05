@@ -9,6 +9,28 @@ export class CalculateTripController {
 
     @Post()
     async calculateTrip(@Body() requestData: any) {
-        return this.calculateTripService.calculateTrip(requestData);
+        const {
+            origin,
+            destination,
+            fuelConsumption,
+            fuelPrice,
+            averageSpeed,
+            drivingStartTime,
+            drivingEndTime,
+            departureDate,
+            apiKey
+        } = requestData;
+
+        return this.calculateTripService.calculateTrip({
+            origin,
+            destination,
+            fuelConsumption,
+            fuelPrice,
+            averageSpeed,
+            drivingStartTime,
+            drivingEndTime,
+            departureDate,
+            apiKey
+        });
     }
 }
