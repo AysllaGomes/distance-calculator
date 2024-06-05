@@ -3,7 +3,9 @@ import { CalculateTripService } from './calculate-trip.service';
 
 @Controller('calculate-trip')
 export class CalculateTripController {
-    constructor(private readonly calculateTripService: CalculateTripService) {}
+    constructor(
+        private readonly calculateTripService: CalculateTripService
+    ) {}
 
     @Post()
     async calculateTrip(@Body() requestData: any) {
