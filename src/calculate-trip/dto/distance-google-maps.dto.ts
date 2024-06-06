@@ -1,4 +1,4 @@
 export class DistanceGoogleMapsDto {
-    distance: string;
-    duration: string;
+  distance: string;
+  duration: string;
 }

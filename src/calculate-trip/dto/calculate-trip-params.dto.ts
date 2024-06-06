@@ -1,34 +1,34 @@
 import { IsString, IsNumber, IsDateString, IsOptional } from 'class-validator';
 
 export class CalculateTripParamsDto {
-    @IsString()
-    origin: string;
+  @IsString()
+  origin: string;
 
-    @IsString()
-    destination: string;
+  @IsString()
+  destination: string;
 
-    @IsNumber()
-    fuelConsumption: number;
+  @IsNumber()
+  fuelConsumption: number;
 
-    @IsNumber()
-    fuelPrice: number;
+  @IsNumber()
+  fuelPrice: number;
 
-    @IsNumber()
-    averageSpeed: number;
+  @IsNumber()
+  averageSpeed: number;
 
-    @IsString()
-    drivingStartTime: string;
+  @IsString()
+  drivingStartTime: string;
 
-    @IsString()
-    drivingEndTime: string;
+  @IsString()
+  drivingEndTime: string;
 
-    @IsDateString()
-    departureDate: string;
+  @IsDateString()
+  departureDate: string;
 
-    @IsString()
-    apiKey: string;
+  @IsString()
+  apiKey: string;
 
-    @IsOptional()
-    @IsNumber()
-    fuelTankSize: number = 55;
+  @IsOptional()
+  @IsNumber()
+  fuelTankSize: number = 55;
 }
