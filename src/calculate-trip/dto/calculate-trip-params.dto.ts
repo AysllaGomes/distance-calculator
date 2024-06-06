@@ -7,5 +7,6 @@ export class CalculateTripParamsDto {
     drivingStartTime: string;
     drivingEndTime: string;
     departureDate: string;
+    fuelTankSize: number;
     apiKey: string;
 }

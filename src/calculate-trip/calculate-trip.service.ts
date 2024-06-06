@@ -7,11 +7,17 @@ import { CalculateTripParamsDto } from './dto/calculate-trip-params.dto';
 
 @Injectable()
 export class CalculateTripService {
-    protected googleMapsService: GoogleMapsService = new GoogleMapsService();
+    constructor(
+        protected readonly googleMapsService: GoogleMapsService
+    ) {}
 
     async calculateTrip(params: CalculateTripParamsDto): Promise<CalculateTripDto> {
         try {
-            const { origin, destination, fuelConsumption, fuelPrice, averageSpeed, drivingStartTime, drivingEndTime, departureDate, apiKey } = params;
+            const {
+                origin, destination, fuelConsumption, fuelPrice,averageSpeed,
+                drivingStartTime, drivingEndTime, departureDate, fuelTankSize, apiKey
+            } = params;
+
             const { distance } = await this.googleMapsService.getDistance(origin, destination, apiKey);
 
             const distanceInKm: number = parseFloat(distance.replace(' km', '').replace(',', '.'));
@@ -39,13 +45,16 @@ export class CalculateTripService {
             const fuelNeeded: number = distanceInKm / fuelConsumption;
             const tripCost: number = fuelNeeded * fuelPrice;
 
+            const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1; // Calcula as paradas para reabastecimento
+
             return {
                 distanceInKm,
                 drivingTimeInHours,
                 totalTravelTimeInHours,
                 arrivalTime: arrivalTime.toISOString(),
                 fuelNeeded,
-                tripCost
+                tripCost,
+                refuelStops
             };
         } catch (error) {
             throw new Error(`Erro ao calcular a viagem: ${error.message}`);

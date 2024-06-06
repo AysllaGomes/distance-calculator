@@ -5,4 +5,5 @@ export class CalculateTripDto {
     arrivalTime: string;
     fuelNeeded: number;
     tripCost: number;
+    refuelStops: number;
 }
