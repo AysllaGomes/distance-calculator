@@ -1,10 +1,10 @@
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 
-import { MapLinkService } from '../../shared/services/map-link/map-link.service';
-import { CalculateTripService } from '../services/calculate-trip.service';
-
 import { CalculateTripDto } from '../dto/calculate-trip.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
+
+import { CalculateTripService } from '../services/calculate-trip.service';
+import { MapLinkService } from '../../shared/services/map-link/map-link.service';
 
 @Controller('calculate-trip')
 export class CalculateTripController {
@@ -24,8 +24,7 @@ export class CalculateTripController {
   getMapLink(
     @Query('origin') origin: string,
     @Query('destination') destination: string,
-    @Query('apiKey') apiKey: string,
   ): string {
-    return this.mapLinkService.generateMapLink(origin, destination, apiKey);
+    return this.mapLinkService.generateMapLink(origin, destination);
   }
 }

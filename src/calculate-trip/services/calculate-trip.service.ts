@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
-
 import { CalculateTripDto } from '../dto/calculate-trip.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
+
+import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
 
 @Injectable()
 export class CalculateTripService {
@@ -22,14 +22,12 @@ export class CalculateTripService {
         drivingStartTime,
         drivingEndTime,
         departureDate,
-        apiKey,
         fuelTankSize = 55,
       } = params;
 
       const { distance } = await this.googleMapsService.getDistance(
         origin,
         destination,
-        apiKey,
       );
 
       const distanceInKm: number = parseFloat(

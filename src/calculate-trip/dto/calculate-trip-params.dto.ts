@@ -25,9 +25,6 @@ export class CalculateTripParamsDto {
   @IsDateString()
   departureDate: string;
 
-  @IsString()
-  apiKey: string;
-
   @IsOptional()
   @IsNumber()
   fuelTankSize: number = 55;

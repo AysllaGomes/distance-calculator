@@ -2,12 +2,17 @@ import axios from 'axios';
 
 import { DistanceGoogleMapsDto } from '../../../calculate-trip/dto/distance-google-maps.dto';
 
+const GOOGLE_MAPS_API_KEY = `${process.env.GOOGLE_MAPS_API_KEY}`;
+
 export class GoogleMapsService {
   async getDistance(
     origin: string,
     destination: string,
-    apiKey: string,
   ): Promise<DistanceGoogleMapsDto> {
+    if (!GOOGLE_MAPS_API_KEY) {
+      throw new Error('Google Maps API key not found in environment variables');
+    }
+
     try {
       const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 
@@ -15,7 +20,7 @@ export class GoogleMapsService {
         params: {
           origins: origin,
           destinations: destination,
-          key: apiKey,
+          key: GOOGLE_MAPS_API_KEY,
         },
       };
 
