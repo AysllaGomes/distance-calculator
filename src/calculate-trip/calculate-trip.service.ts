@@ -14,8 +14,16 @@ export class CalculateTripService {
     async calculateTrip(params: CalculateTripParamsDto): Promise<CalculateTripDto> {
         try {
             const {
-                origin, destination, fuelConsumption, fuelPrice,averageSpeed,
-                drivingStartTime, drivingEndTime, departureDate, fuelTankSize, apiKey
+                origin,
+                destination,
+                fuelConsumption,
+                fuelPrice,
+                averageSpeed,
+                drivingStartTime,
+                drivingEndTime,
+                departureDate,
+                apiKey,
+                fuelTankSize = 55
             } = params;
 
             const { distance } = await this.googleMapsService.getDistance(origin, destination, apiKey);
@@ -45,7 +53,8 @@ export class CalculateTripService {
             const fuelNeeded: number = distanceInKm / fuelConsumption;
             const tripCost: number = fuelNeeded * fuelPrice;
 
-            const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1; // Calcula as paradas para reabastecimento
+            // Calcula as paradas para reabastecimento
+            const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1;
 
             return {
                 distanceInKm,
