@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "207327fc-b7e3-4430-98e8-71bf7033f47f",
+		"_postman_id": "91edd148-95bd-4bc4-9112-3c7172a58bae",
 		"name": "Distance Calculator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "3224041",
-		"_collection_link": "https://universal-workspace.postman.co/workspace/Natura~80f4d357-4efc-42f9-986e-5b2ba53d9a14/collection/3224041-207327fc-b7e3-4430-98e8-71bf7033f47f?action=share&source=collection_link&creator=3224041"
+		"_exporter_id": "34851654",
+		"_collection_link": "https://interstellar-moon-natura-eco.postman.co/workspace/Projects~f89ba0ff-5f2a-45c7-8254-cad49e1146d5/collection/34851654-91edd148-95bd-4bc4-9112-3c7172a58bae?action=share&source=collection_link&creator=34851654"
 	},
 	"item": [
 		{
@@ -14,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"origin\": \"Conceição da Aparecida, Minas Gerais, Brasil\",\r\n    \"destination\": \"Planaltina, Goiás, Brasil\",\r\n    \"fuelConsumption\": 14,\r\n    \"fuelPrice\": 5.80,\r\n    \"averageSpeed\": 77,\r\n    \"drivingStartTime\": \"09:00\",\r\n    \"drivingEndTime\": \"18:00\",\r\n    \"departureDate\": \"2024-06-06\",\r\n    \"fuelTankSize\": 50,\r\n    \"apiKey\": \"{{api_key_google}}\"\r\n}",
+					"raw": "{\r\n    \"origin\": \"Planaltina, Goiás, Brasil\",\r\n    \"destination\": \"Conceição da Aparecida, Minas Gerais, Brasil\",\r\n    \"fuelConsumption\": 10,\r\n    \"fuelPrice\": 5.80,\r\n    \"averageSpeed\": 77,\r\n    \"drivingStartTime\": \"09:00\",\r\n    \"drivingEndTime\": \"18:00\",\r\n    \"departureDate\": \"2024-06-07\",\r\n    \"fuelTankSize\": 50, // opcional\r\n    \"restTime\": 3 // opcional\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -22,12 +22,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/calculate-trip",
-					"protocol": "http",
+					"raw": "{{port}}/calculate-trip",
 					"host": [
-						"localhost"
+						"{{port}}"
 					],
-					"port": "3000",
 					"path": [
 						"calculate-trip"
 					]
@@ -41,12 +39,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/calculate-trip/map-link?origin=São+Paulo&destination=Rio+de+Janeiro&apiKey={{api_key_google}}",
-					"protocol": "http",
+					"raw": "{{port}}/calculate-trip/map-link?origin=São+Paulo&destination=Rio+de+Janeiro",
 					"host": [
-						"localhost"
+						"{{port}}"
 					],
-					"port": "3000",
 					"path": [
 						"calculate-trip",
 						"map-link"
@@ -59,15 +55,21 @@
 						{
 							"key": "destination",
 							"value": "Rio+de+Janeiro"
-						},
-						{
-							"key": "apiKey",
-							"value": "{{api_key_google}}"
 						}
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "port",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "api_key_google",
+			"value": "AIzaSyBXyMJxJksK0wJOTweDXHI7abBTU8Pjip0"
 		}
 	]
 }
