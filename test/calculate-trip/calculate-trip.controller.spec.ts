@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CalculateTripController } from './calculate-trip.controller';
+
+import { CalculateTripController } from '../../src/calculate-trip/calculate-trip.controller';
 
 describe('CalculateTripController', () => {
   let controller: CalculateTripController;
