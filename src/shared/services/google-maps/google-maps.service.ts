@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+import { environment } from '../../../config/environment';
+
 import { DistanceGoogleMapsDto } from '../../../calculate-trip/dto/distance-google-maps.dto';
 
-const GOOGLE_MAPS_API_KEY = `${process.env.GOOGLE_MAPS_API_KEY}`;
+const GOOGLE_MAPS_API_KEY = `${environment.app.googleApiKey}`;
 
 export class GoogleMapsService {
   async getDistance(

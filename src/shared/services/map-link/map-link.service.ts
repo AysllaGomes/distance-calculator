@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-const GOOGLE_MAPS_API_KEY = `${process.env.GOOGLE_MAPS_API_KEY}`;
+import { environment } from '../../../config/environment';
+
+const GOOGLE_MAPS_API_KEY = `${environment.app.googleApiKey}`;
 
 @Injectable()
 export class MapLinkService {
