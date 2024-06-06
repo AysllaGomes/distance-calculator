@@ -1,18 +1,29 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+
+import { MapLinkService } from '../map-link/map-link.service';
+import { CalculateTripService } from './calculate-trip.service';
 
 import { CalculateTripDto } from './dto/calculate-trip.dto';
-
-import { CalculateTripService } from './calculate-trip.service';
 import { CalculateTripParamsDto } from './dto/calculate-trip-params.dto';
 
 @Controller('calculate-trip')
 export class CalculateTripController {
     constructor(
-        private readonly calculateTripService: CalculateTripService
+        private readonly mapLinkService: MapLinkService,
+        private readonly calculateTripService: CalculateTripService,
     ) {}
 
     @Post()
     async calculateTrip(@Body() requestData: CalculateTripParamsDto): Promise<CalculateTripDto> {
         return this.calculateTripService.calculateTrip(requestData);
+    }
+
+    @Get('map-link')
+    getMapLink(
+        @Query('origin') origin: string,
+        @Query('destination') destination: string,
+        @Query('apiKey') apiKey: string
+    ): string {
+        return this.mapLinkService.generateMapLink(origin, destination, apiKey);
     }
 }

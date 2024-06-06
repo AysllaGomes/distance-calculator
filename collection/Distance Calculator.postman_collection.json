@@ -14,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"origin\": \"Conceição da Aparecida, Minas Gerais, Brasil\",\r\n    \"destination\": \"Planaltina, Goiás, Brasil\",\r\n    \"fuelConsumption\": 14,\r\n    \"fuelPrice\": 5.80,\r\n    \"averageSpeed\": 77,\r\n    \"drivingStartTime\": \"09:00\",\r\n    \"drivingEndTime\": \"18:00\",\r\n    \"departureDate\": \"2024-06-06\",\r\n    \"apiKey\": \"{{api_key_google}}\"\r\n}",
+					"raw": "{\r\n    \"origin\": \"Conceição da Aparecida, Minas Gerais, Brasil\",\r\n    \"destination\": \"Planaltina, Goiás, Brasil\",\r\n    \"fuelConsumption\": 14,\r\n    \"fuelPrice\": 5.80,\r\n    \"averageSpeed\": 77,\r\n    \"drivingStartTime\": \"09:00\",\r\n    \"drivingEndTime\": \"18:00\",\r\n    \"departureDate\": \"2024-06-06\",\r\n    \"fuelTankSize\": 50,\r\n    \"apiKey\": \"{{api_key_google}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -30,6 +30,40 @@
 					"port": "3000",
 					"path": [
 						"calculate-trip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Map Link",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/calculate-trip/map-link?origin=São+Paulo&destination=Rio+de+Janeiro&apiKey={{api_key_google}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"calculate-trip",
+						"map-link"
+					],
+					"query": [
+						{
+							"key": "origin",
+							"value": "São+Paulo"
+						},
+						{
+							"key": "destination",
+							"value": "Rio+de+Janeiro"
+						},
+						{
+							"key": "apiKey",
+							"value": "{{api_key_google}}"
+						}
 					]
 				}
 			},
