@@ -23,6 +23,7 @@ export class CalculateTripService {
         drivingEndTime,
         departureDate,
         fuelTankSize = 55,
+        restTime = 1,
       } = params;
 
       const { distance } = await this.googleMapsService.getDistance(
@@ -50,8 +51,8 @@ export class CalculateTripService {
       const breaks: number = daysNeeded - 1;
 
       // Calcular o tempo total de viagem incluindo pausas
-      // considerando cada intervalo de 1 hora
-      const totalTravelTimeInHours: number = drivingTimeInHours + breaks;
+      const totalTravelTimeInHours: number =
+        drivingTimeInHours + breaks * restTime;
 
       const departure: Date = new Date(departureDate);
       // Data e hora de partida (departureDate) somada ao tempo total da viagem (incluindo pausas):
