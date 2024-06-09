@@ -7,7 +7,7 @@ export class CalculateTripParamsDto {
   @IsString()
   destination: string;
 
-  // Consumo de combustível (km/l)
+  // Consumo de combustível em km/l
   @IsNumber()
   fuelConsumption: number;
 
@@ -15,15 +15,15 @@ export class CalculateTripParamsDto {
   @IsNumber()
   fuelPrice: number;
 
-  // Velocidade média na rota (km/h)
+  // Velocidade média em km/h
   @IsNumber()
   averageSpeed: number;
 
-  // Horário de início da condução
+  // Hora de início da condução
   @IsString()
   drivingStartTime: string;
 
-  // Horário de término da condução
+  // Hora de fim da condução
   @IsString()
   drivingEndTime: string;
 
@@ -31,13 +31,18 @@ export class CalculateTripParamsDto {
   @IsDateString()
   departureDate: string;
 
-  // Tamanho do tanque de combustível (litros)
+  // Tamanho do tanque de combustível em litros (opcional)
   @IsOptional()
   @IsNumber()
   fuelTankSize?: number;
 
-  // Tempo de descanso (horas)
+  // Tempo de descanso em horas (opcional)
   @IsOptional()
   @IsNumber()
   restTime?: number;
+
+  // Tipo de combustível (opcional)
+  @IsOptional()
+  @IsString()
+  fuelType?: string;
 }

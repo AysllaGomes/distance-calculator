@@ -24,6 +24,7 @@ export class CalculateTripService {
         departureDate,
         fuelTankSize = 55,
         restTime = 1,
+        fuelType = 'gasoline',
       } = params;
 
       const { distance } = await this.googleMapsService.getDistance(
@@ -66,6 +67,12 @@ export class CalculateTripService {
       // Calcula as paradas para reabastecimento
       const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1;
 
+      // Calcular as emissões de carbono
+      const emissions: number = this.calculateCarbonEmissions(
+        fuelType,
+        fuelNeeded,
+      );
+
       return {
         distanceInKm,
         drivingTimeInHours,
@@ -74,9 +81,29 @@ export class CalculateTripService {
         fuelNeeded,
         tripCost,
         refuelStops,
+        emissions,
       };
     } catch (error) {
       throw new Error(`Erro ao calcular a viagem: ${error.message}`);
     }
+  }
+
+  private calculateCarbonEmissions(
+    fuelType: string,
+    fuelNeeded: number,
+  ): number {
+    // Fatores de emissão de carbono (em kg CO2 por litro)
+    const emissionFactors = {
+      gasoline: 2.31, // EPA - United States Environmental Protection Agency
+      diesel: 2.68, // DEFRA - Department for Environment, Food & Rural Affairs
+      ethanol: 1.91, // USDA - United States Department of Agriculture
+    };
+
+    // Fator de emissão padrão (gasolina)
+    const emissionFactor =
+      emissionFactors[fuelType] || emissionFactors.gasoline;
+
+    // Emissões de carbono em kg
+    return fuelNeeded * emissionFactor;
   }
 }

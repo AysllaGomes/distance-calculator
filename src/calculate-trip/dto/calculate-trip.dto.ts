@@ -6,4 +6,5 @@ export class CalculateTripDto {
   fuelNeeded: number;
   tripCost: number;
   refuelStops: number;
+  emissions: number;
 }
