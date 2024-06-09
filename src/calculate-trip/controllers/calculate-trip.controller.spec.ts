@@ -63,6 +63,7 @@ describe('CalculateTripController', (): void => {
         fuelNeeded: 10,
         tripCost: 55,
         refuelStops: 0,
+        emissions: 10,
       };
 
       jest
