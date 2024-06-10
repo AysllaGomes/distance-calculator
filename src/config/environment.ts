@@ -7,9 +7,7 @@ export interface IEnvironment {
 
 export const environment: IEnvironment = {
   app: {
-    googleApiKey:
-      process.env.GOOGLE_MAPS_API_KEY ||
-      'AIzaSyBXyMJxJksK0wJOTweDXHI7abBTU8Pjip0',
+    googleApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
   },
   isValid(): boolean {
     return true;
