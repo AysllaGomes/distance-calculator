@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { CalculateTripDto } from '../dto/calculate-trip.dto';
+import { RoutesDto } from '../../shared/models/routes.dto';
+import { GoogleMapsDto } from '../../shared/models/google-maps.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
 
 import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
@@ -9,9 +10,7 @@ import { GoogleMapsService } from '../../shared/services/google-maps/google-maps
 export class CalculateTripService {
   constructor(protected readonly googleMapsService: GoogleMapsService) {}
 
-  async calculateTrip(
-    params: CalculateTripParamsDto,
-  ): Promise<CalculateTripDto> {
+  async calculateTrip(params: CalculateTripParamsDto): Promise<any> {
     try {
       const {
         origin,
@@ -27,62 +26,54 @@ export class CalculateTripService {
         fuelType = 'gasoline',
       } = params;
 
-      const { distance } = await this.googleMapsService.getDistance(
-        origin,
-        destination,
-      );
+      const directions: GoogleMapsDto =
+        await this.googleMapsService.getDistance(origin, destination);
+      const routes: RoutesDto[] = directions.routes;
 
-      const distanceInKm: number = parseFloat(
-        distance.replace(' km', '').replace(',', '.'),
-      );
-      const drivingTimeInHours: number = distanceInKm / averageSpeed;
+      return routes.map((route: RoutesDto) => {
+        const distanceInKm: number = route.legs[0].distance.value / 1000;
+        const drivingTimeInHours: number = distanceInKm / averageSpeed;
 
-      const drivingStart: Date = new Date(`1970-01-01T${drivingStartTime}:00Z`);
-      const drivingEnd: Date = new Date(`1970-01-01T${drivingEndTime}:00Z`);
-      const drivingIntervalHours: number =
-        (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
+        const drivingStart: Date = new Date(
+          `1970-01-01T${drivingStartTime}:00Z`,
+        );
+        const drivingEnd: Date = new Date(`1970-01-01T${drivingEndTime}:00Z`);
+        const drivingIntervalHours: number =
+          (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
 
-      // Calcular o número de dias necessários
-      const daysNeeded: number = Math.ceil(
-        drivingTimeInHours / drivingIntervalHours,
-      );
+        const daysNeeded: number = Math.ceil(
+          drivingTimeInHours / drivingIntervalHours,
+        );
 
-      // Calcular o número de pausas necessárias
-      // Um intervalo de descanso após cada dia de condução
-      const breaks: number = daysNeeded - 1;
+        const breaks: number = daysNeeded - 1;
+        const totalTravelTimeInHours: number =
+          drivingTimeInHours + breaks * restTime;
 
-      // Calcular o tempo total de viagem incluindo pausas
-      const totalTravelTimeInHours: number =
-        drivingTimeInHours + breaks * restTime;
+        const departure: Date = new Date(departureDate);
+        const arrivalTime: Date = new Date(
+          departure.getTime() + totalTravelTimeInHours * 60 * 60 * 1000,
+        );
 
-      const departure: Date = new Date(departureDate);
-      // Data e hora de partida (departureDate) somada ao tempo total da viagem (incluindo pausas):
-      const arrivalTime: Date = new Date(
-        departure.getTime() + totalTravelTimeInHours * 60 * 60 * 1000,
-      );
+        const fuelNeeded: number = distanceInKm / fuelConsumption;
+        const tripCost: number = fuelNeeded * fuelPrice;
+        const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1;
 
-      const fuelNeeded: number = distanceInKm / fuelConsumption;
-      const tripCost: number = fuelNeeded * fuelPrice;
+        const emissions: number = this.calculateCarbonEmissions(
+          fuelType,
+          fuelNeeded,
+        );
 
-      // Calcula as paradas para reabastecimento
-      const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1;
-
-      // Calcular as emissões de carbono
-      const emissions: number = this.calculateCarbonEmissions(
-        fuelType,
-        fuelNeeded,
-      );
-
-      return {
-        distanceInKm,
-        drivingTimeInHours,
-        totalTravelTimeInHours,
-        arrivalTime: arrivalTime.toISOString(),
-        fuelNeeded,
-        tripCost,
-        refuelStops,
-        emissions,
-      };
+        return {
+          distanceInKm,
+          drivingTimeInHours,
+          totalTravelTimeInHours,
+          arrivalTime: arrivalTime.toISOString(),
+          fuelNeeded,
+          tripCost,
+          refuelStops,
+          emissions,
+        };
+      });
     } catch (error) {
       throw new Error(`Erro ao calcular a viagem: ${error.message}`);
     }
