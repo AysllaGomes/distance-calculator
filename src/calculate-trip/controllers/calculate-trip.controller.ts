@@ -16,7 +16,7 @@ export class CalculateTripController {
   @Post()
   async calculateTrip(
     @Body() requestData: CalculateTripParamsDto,
-  ): Promise<CalculateTripDto> {
+  ): Promise<CalculateTripDto[]> {
     return this.calculateTripService.calculateTrip(requestData);
   }
 

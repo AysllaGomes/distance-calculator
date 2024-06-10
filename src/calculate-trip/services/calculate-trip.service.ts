@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { RoutesDto } from '../../shared/models/routes.dto';
+import { CalculateTripDto } from '../dto/calculate-trip.dto';
 import { GoogleMapsDto } from '../../shared/models/google-maps.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
 
@@ -10,7 +11,9 @@ import { GoogleMapsService } from '../../shared/services/google-maps/google-maps
 export class CalculateTripService {
   constructor(protected readonly googleMapsService: GoogleMapsService) {}
 
-  async calculateTrip(params: CalculateTripParamsDto): Promise<any> {
+  async calculateTrip(
+    params: CalculateTripParamsDto,
+  ): Promise<CalculateTripDto[]> {
     try {
       const {
         origin,
@@ -32,7 +35,12 @@ export class CalculateTripService {
 
       return routes.map((route: RoutesDto) => {
         const distanceInKm: number = route.legs[0].distance.value / 1000;
-        const drivingTimeInHours: number = distanceInKm / averageSpeed;
+
+        // Use the duration in traffic if available, otherwise use average speed
+        const drivingTimeInSeconds: number = route.legs[0].duration_in_traffic
+          ? route.legs[0].duration_in_traffic.value
+          : (distanceInKm / averageSpeed) * 3600;
+        const drivingTimeInHours: number = drivingTimeInSeconds / 3600;
 
         const drivingStart: Date = new Date(
           `1970-01-01T${drivingStartTime}:00Z`,

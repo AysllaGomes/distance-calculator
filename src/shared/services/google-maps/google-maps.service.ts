@@ -1,11 +1,14 @@
 import axios from 'axios';
 
+import { Injectable } from '@nestjs/common';
+
 import { environment } from '../../../config/environment';
 
 import { GoogleMapsDto } from '../../models/google-maps.dto';
 
 const GOOGLE_MAPS_API_KEY = `${environment.app.googleApiKey}`;
 
+@Injectable()
 export class GoogleMapsService {
   async getDistance(
     origin: string,
@@ -22,6 +25,7 @@ export class GoogleMapsService {
           params: {
             origin,
             destination,
+            departure_time: 'now',
             alternatives: true,
             key: environment.app.googleApiKey,
           },
