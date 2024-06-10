@@ -7,9 +7,9 @@ import { StartLocationDto } from './start-location.dto';
 export class LegsDto {
   distance: DistanceDto;
   duration: DurationDto;
-  end_address: string;
-  end_location: EndLocationDto;
-  start_address: string;
-  start_location: StartLocationDto;
-  steps: StepsDto[];
+  end_address?: string;
+  end_location?: EndLocationDto;
+  start_address?: string;
+  start_location?: StartLocationDto;
+  steps?: StepsDto[];
 }
