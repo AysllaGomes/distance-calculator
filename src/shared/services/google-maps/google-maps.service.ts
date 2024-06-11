@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { environment } from '../../../config/environment';
 
-import { GoogleMapsDto } from '../../models/google-maps.dto';
+import { GoogleMapsDto } from '../../models/google-maps/google-maps.dto';
 
 const GOOGLE_MAPS_API_KEY = `${environment.app.googleApiKey}`;
 

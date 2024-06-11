@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { CalculateTripDto } from '../dto/calculate-trip.dto';
-import { GoogleMapsDto } from '../../shared/models/google-maps.dto';
+import { GoogleMapsDto } from '../../shared/models/google-maps/google-maps.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
 
 import { CalculateTripService } from './calculate-trip.service';

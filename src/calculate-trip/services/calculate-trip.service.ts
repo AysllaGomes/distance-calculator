@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { RoutesDto } from '../../shared/models/routes.dto';
 import { CalculateTripDto } from '../dto/calculate-trip.dto';
-import { GoogleMapsDto } from '../../shared/models/google-maps.dto';
+import { RoutesDto } from '../../shared/models/google-maps/routes.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
+import { WeatherMap } from '../../shared/models/weather-map/weather-map.model';
+import { GoogleMapsDto } from '../../shared/models/google-maps/google-maps.dto';
 
 import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
 import { WeatherService } from '../../shared/services/open-weather-map/open-weather-map.service';
@@ -26,10 +27,9 @@ export class CalculateTripService {
         );
       const routes: RoutesDto[] = directions.routes;
 
-      const weatherDataOrigin = await this.weatherService.getCurrentWeather(
-        params.origin,
-      );
-      const weatherDataDestination =
+      const weatherDataOrigin: WeatherMap =
+        await this.weatherService.getCurrentWeather(params.origin);
+      const weatherDataDestination: WeatherMap =
         await this.weatherService.getCurrentWeather(params.destination);
 
       return routes.map((route: RoutesDto) =>
