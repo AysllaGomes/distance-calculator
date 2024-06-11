@@ -59,16 +59,18 @@ Este projeto é uma API para calcular detalhes de uma viagem, incluindo tempo de
 
    ```
    {
-     "origin": "Conceição da Aparecida, Minas Gerais, Brasil",
-     "destination": "Planaltina, Goiás, Brasil",
-     "fuelConsumption": 14,
-     "fuelPrice": 5.80,
-     "averageSpeed": 77,
-     "drivingStartTime": "09:00",
-     "drivingEndTime": "18:00",
-     "departureDate": "2024-06-06",
-     "fuelTankSize": 55 // Opcional, padrão é 55
-   }
+        "origin": "Planaltina, Goiás, Brasil",
+        "destination": "Conceição da Aparecida, Minas Gerais, Brasil",
+        "fuelConsumption": 10,
+        "fuelPrice": 5.80,
+        "averageSpeed": 77,
+        "drivingStartTime": "09:00",
+        "drivingEndTime": "18:00",
+        "departureDate": "2024-06-07",
+        "fuelTankSize": 50, // optional
+        "restTime": 3,  // optional
+        "fuelType": "ethanol" // optional
+    }
    ```
 
 ## Gerar Link do Mapa:

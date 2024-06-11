@@ -1,5 +1,6 @@
 export interface IEnvironment {
   app: {
+    port: number;
     googleApiKey: string;
     openWeatherApiKey: string;
   };
@@ -8,6 +9,7 @@ export interface IEnvironment {
 
 export const environment: IEnvironment = {
   app: {
+    port: 3000,
     googleApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
     openWeatherApiKey: process.env.OPEN_WEATHER_MAP_API_KEY || '',
   },

@@ -1,48 +1,51 @@
-import { IsString, IsNumber, IsDateString, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CalculateTripParamsDto {
+  @ApiProperty()
   @IsString()
   origin: string;
 
+  @ApiProperty()
   @IsString()
   destination: string;
 
-  // Consumo de combustível em km/l
+  @ApiProperty()
   @IsNumber()
   fuelConsumption: number;
 
-  // Preço do combustível por litro
+  @ApiProperty()
   @IsNumber()
   fuelPrice: number;
 
-  // Velocidade média em km/h
+  @ApiProperty()
   @IsNumber()
   averageSpeed: number;
 
-  // Hora de início da condução
+  @ApiProperty()
   @IsString()
   drivingStartTime: string;
 
-  // Hora de fim da condução
+  @ApiProperty()
   @IsString()
   drivingEndTime: string;
 
-  // Data de partida
+  @ApiProperty()
   @IsDateString()
   departureDate: string;
 
-  // Tamanho do tanque de combustível em litros (opcional)
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
   fuelTankSize?: number;
 
-  // Tempo de descanso em horas (opcional)
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
   restTime?: number;
 
-  // Tipo de combustível (opcional)
   @IsOptional()
   @IsString()
+  @ApiProperty()
   fuelType?: string;
 }
