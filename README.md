@@ -51,7 +51,7 @@ Este projeto é uma API para calcular detalhes de uma viagem, incluindo tempo de
 5. Endpoint:
 
 
-## Calcular Viagem para calcular a viagem:
+## Calcular viagem:
 
 ### URL: `/calculate-trip`
 ## Método: POST
@@ -71,7 +71,7 @@ Este projeto é uma API para calcular detalhes de uma viagem, incluindo tempo de
    }
    ```
 
-## Gerar Link de Mapa:
+## Gerar Link do Mapa:
 
 ### URL: `/calculate-trip/map-link`
 
