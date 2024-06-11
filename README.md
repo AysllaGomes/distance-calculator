@@ -17,9 +17,13 @@ Este projeto é uma API para calcular detalhes de uma viagem, incluindo tempo de
 
 ## Pré-requisitos
 
-- Node.js v14 ou superior
-- NPM ou Yarn
-- Conta e chave de API do Google Maps
+- Node.js v14 ou superior. Você pode baixá-lo [aqui](https://nodejs.org/en/blog/release/v14.17.3) 
+- NPM. Você pode instalá-lo seguindo as instruções [aqui](https://docs.npmjs.com/getting-started) para NPM. 
+- Conta e chave de API do Google Maps. Você pode obter uma chave de API do Google Maps seguindo as instruções [aqui](https://cloud.google.com/apis/)
+
+## Documentação da API
+A documentação da API é gerada automaticamente pelo Swagger.
+Após iniciar o servidor, você pode acessar a documentação interativa em http://localhost:3000/api-docs.
 
 ## Instalação
 
