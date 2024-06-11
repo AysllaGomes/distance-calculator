@@ -19,101 +19,111 @@ export class CalculateTripService {
     params: CalculateTripParamsDto,
   ): Promise<CalculateTripDto[]> {
     try {
-      const {
-        origin,
-        destination,
-        fuelConsumption,
-        fuelPrice,
-        averageSpeed,
-        drivingStartTime,
-        drivingEndTime,
-        departureDate,
-        fuelTankSize = 55,
-        restTime = 1,
-        fuelType = 'gasoline',
-      } = params;
-
       const directions: GoogleMapsDto =
-        await this.googleMapsService.getDistance(origin, destination);
+        await this.googleMapsService.getDistance(
+          params.origin,
+          params.destination,
+        );
       const routes: RoutesDto[] = directions.routes;
 
-      const weatherDataOrigin =
-        await this.weatherService.getCurrentWeather(origin);
+      const weatherDataOrigin = await this.weatherService.getCurrentWeather(
+        params.origin,
+      );
       const weatherDataDestination =
-        await this.weatherService.getCurrentWeather(destination);
+        await this.weatherService.getCurrentWeather(params.destination);
 
-      return routes.map((route: RoutesDto) => {
-        const distanceInKm: number = route.legs[0].distance.value / 1000;
-
-        // Use the duration in traffic if available, otherwise use average speed
-        const drivingTimeInSeconds: number = route.legs[0].duration_in_traffic
-          ? route.legs[0].duration_in_traffic.value
-          : (distanceInKm / averageSpeed) * 3600;
-        const drivingTimeInHours: number = drivingTimeInSeconds / 3600;
-
-        const drivingStart: Date = new Date(
-          `1970-01-01T${drivingStartTime}:00Z`,
-        );
-        const drivingEnd: Date = new Date(`1970-01-01T${drivingEndTime}:00Z`);
-        const drivingIntervalHours: number =
-          (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
-
-        const daysNeeded: number = Math.ceil(
-          drivingTimeInHours / drivingIntervalHours,
-        );
-
-        const breaks: number = daysNeeded - 1;
-        const totalTravelTimeInHours: number =
-          drivingTimeInHours + breaks * restTime;
-
-        const departure: Date = new Date(departureDate);
-        const arrivalTime: Date = new Date(
-          departure.getTime() + totalTravelTimeInHours * 60 * 60 * 1000,
-        );
-
-        const fuelNeeded: number = distanceInKm / fuelConsumption;
-        const tripCost: number = fuelNeeded * fuelPrice;
-        const refuelStops: number = Math.ceil(fuelNeeded / fuelTankSize) - 1;
-
-        const emissions: number = this.calculateCarbonEmissions(
-          fuelType,
-          fuelNeeded,
-        );
-
-        return {
-          distanceInKm,
-          drivingTimeInHours,
-          totalTravelTimeInHours,
-          arrivalTime: arrivalTime.toISOString(),
-          fuelNeeded,
-          tripCost,
-          refuelStops,
-          emissions,
-          weatherOrigin: weatherDataOrigin,
-          weatherDestination: weatherDataDestination,
-        };
-      });
+      return routes.map((route: RoutesDto) =>
+        this.calculateRoute(
+          route,
+          params,
+          weatherDataOrigin,
+          weatherDataDestination,
+        ),
+      );
     } catch (error) {
       throw new Error(`Erro ao calcular a viagem: ${error.message}`);
     }
+  }
+
+  private calculateRoute(
+    route: RoutesDto,
+    params: CalculateTripParamsDto,
+    weatherDataOrigin: any,
+    weatherDataDestination: any,
+  ): CalculateTripDto {
+    const distanceInKm: number = route.legs[0].distance.value / 1000;
+    const drivingTimeInSeconds: number = route.legs[0].duration_in_traffic
+      ? route.legs[0].duration_in_traffic.value
+      : (distanceInKm / params.averageSpeed) * 3600;
+    const drivingTimeInHours: number = drivingTimeInSeconds / 3600;
+
+    const drivingStart: Date = this.parseTime(params.drivingStartTime);
+    const drivingEnd: Date = this.parseTime(params.drivingEndTime);
+    const drivingIntervalHours: number =
+      (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
+
+    const daysNeeded: number = Math.ceil(
+      drivingTimeInHours / drivingIntervalHours,
+    );
+    const breaks: number = daysNeeded - 1;
+    const totalTravelTimeInHours: number =
+      drivingTimeInHours + breaks * params.restTime;
+
+    const arrivalTime: Date = this.calculateArrivalTime(
+      params.departureDate,
+      totalTravelTimeInHours,
+    );
+
+    const fuelNeeded: number = distanceInKm / params.fuelConsumption;
+    const tripCost: number = fuelNeeded * params.fuelPrice;
+    const refuelStops: number = Math.ceil(fuelNeeded / params.fuelTankSize) - 1;
+
+    const emissions: number = this.calculateCarbonEmissions(
+      params.fuelType,
+      fuelNeeded,
+    );
+
+    return {
+      distanceInKm,
+      drivingTimeInHours,
+      totalTravelTimeInHours,
+      arrivalTime: arrivalTime.toISOString(),
+      fuelNeeded,
+      tripCost,
+      refuelStops,
+      emissions,
+      weatherOrigin: weatherDataOrigin,
+      weatherDestination: weatherDataDestination,
+    };
+  }
+
+  private parseTime(time: string): Date {
+    return new Date(`1970-01-01T${time}:00Z`);
+  }
+
+  private calculateArrivalTime(
+    departureDate: string,
+    totalTravelTimeInHours: number,
+  ): Date {
+    const departure: Date = new Date(departureDate);
+    return new Date(
+      departure.getTime() + totalTravelTimeInHours * 60 * 60 * 1000,
+    );
   }
 
   private calculateCarbonEmissions(
     fuelType: string,
     fuelNeeded: number,
   ): number {
-    // Fatores de emissão de carbono (em kg CO2 por litro)
     const emissionFactors = {
-      gasoline: 2.31, // EPA - United States Environmental Protection Agency
-      diesel: 2.68, // DEFRA - Department for Environment, Food & Rural Affairs
-      ethanol: 1.91, // USDA - United States Department of Agriculture
+      gasoline: 2.31,
+      diesel: 2.68,
+      ethanol: 1.91,
     };
 
-    // Fator de emissão padrão (gasolina)
     const emissionFactor =
       emissionFactors[fuelType] || emissionFactors.gasoline;
 
-    // Emissões de carbono em kg
     return fuelNeeded * emissionFactor;
   }
 }
