@@ -6,10 +6,14 @@ import { GoogleMapsDto } from '../../shared/models/google-maps.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
 
 import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
+import { WeatherService } from '../../shared/services/open-weather-map/open-weather-map.service';
 
 @Injectable()
 export class CalculateTripService {
-  constructor(protected readonly googleMapsService: GoogleMapsService) {}
+  constructor(
+    protected readonly weatherService: WeatherService,
+    protected readonly googleMapsService: GoogleMapsService,
+  ) {}
 
   async calculateTrip(
     params: CalculateTripParamsDto,
@@ -32,6 +36,11 @@ export class CalculateTripService {
       const directions: GoogleMapsDto =
         await this.googleMapsService.getDistance(origin, destination);
       const routes: RoutesDto[] = directions.routes;
+
+      const weatherDataOrigin =
+        await this.weatherService.getCurrentWeather(origin);
+      const weatherDataDestination =
+        await this.weatherService.getCurrentWeather(destination);
 
       return routes.map((route: RoutesDto) => {
         const distanceInKm: number = route.legs[0].distance.value / 1000;
@@ -80,6 +89,8 @@ export class CalculateTripService {
           tripCost,
           refuelStops,
           emissions,
+          weatherOrigin: weatherDataOrigin,
+          weatherDestination: weatherDataDestination,
         };
       });
     } catch (error) {
