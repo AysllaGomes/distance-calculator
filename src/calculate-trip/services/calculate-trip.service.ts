@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+import { WeatherMap } from '../../shared/models/weather-map/weather-map.model';
+
 import { CalculateTripDto } from '../dto/calculate-trip.dto';
 import { RoutesDto } from '../../shared/models/google-maps/routes.dto';
 import { CalculateTripParamsDto } from '../dto/calculate-trip-params.dto';
-import { WeatherMap } from '../../shared/models/weather-map/weather-map.model';
 import { GoogleMapsDto } from '../../shared/models/google-maps/google-maps.dto';
 
 import { GoogleMapsService } from '../../shared/services/google-maps/google-maps.service';
@@ -48,8 +49,8 @@ export class CalculateTripService {
   private calculateRoute(
     route: RoutesDto,
     params: CalculateTripParamsDto,
-    weatherDataOrigin: any,
-    weatherDataDestination: any,
+    weatherDataOrigin: WeatherMap,
+    weatherDataDestination: WeatherMap,
   ): CalculateTripDto {
     const distanceInKm: number = route.legs[0].distance.value / 1000;
     const drivingTimeInSeconds: number = route.legs[0].duration_in_traffic
@@ -57,10 +58,10 @@ export class CalculateTripService {
       : (distanceInKm / params.averageSpeed) * 3600;
     const drivingTimeInHours: number = drivingTimeInSeconds / 3600;
 
-    const drivingStart: Date = this.parseTime(params.drivingStartTime);
-    const drivingEnd: Date = this.parseTime(params.drivingEndTime);
+    const startTime: Date = this.parseTime(params.drivingStartTime);
+    const endTime: Date = this.parseTime(params.drivingEndTime);
     const drivingIntervalHours: number =
-      (drivingEnd.getTime() - drivingStart.getTime()) / (1000 * 60 * 60);
+      (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
     const daysNeeded: number = Math.ceil(
       drivingTimeInHours / drivingIntervalHours,
