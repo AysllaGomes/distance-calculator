@@ -1,20 +1,19 @@
-# Distance Calculator API
+# Projeto de Cálculo de Viagens
 
-Este é um projeto de API utilizando NestJS que calcula a distância, custo de combustível, tempo de viagem e fornece um link para um mapa embutido mostrando a rota entre dois pontos.
+Este projeto é uma API para calcular detalhes de uma viagem, incluindo tempo de viagem, custo de combustível, emissões de carbono e condições meteorológicas ao longo da rota.
 
 ## Funcionalidades
 
-- Calcular a distância entre duas localidades usando a API do Google Maps.
-- Calcular o custo de combustível com base no consumo e preço do combustível.
-- Calcular o tempo total de viagem considerando pausas para descanso.
-- Gerar um link para um mapa embutido mostrando a rota.
+- Calcular a distância e o tempo de viagem entre dois locais.
+- Calcular o custo de combustível da viagem.
+- Calcular as emissões de carbono da viagem com base no tipo de combustível.
+- Obter condições meteorológicas no ponto de origem e no destino.
 
 ## Tecnologias Utilizadas
 
 - [NestJS](https://nestjs.com/)
 - [Google Maps API](https://developers.google.com/maps)
-- [Axios](https://github.com/axios/axios)
-- [class-validator](https://github.com/typestack/class-validator) e [class-transformer](https://github.com/typestack/class-transformer) para validação de dados.
+- [OpenWeatherMap API](https://openweathermap.org/)
 
 ## Pré-requisitos
 
@@ -25,34 +24,38 @@ Este é um projeto de API utilizando NestJS que calcula a distância, custo de c
 ## Instalação
 
 1. Clone o repositório:
+```bash
+   git clone https://github.com/AysllaGomes/distance-calculator.git
+   cd seu-repositorio
+```
 
-   ```bash
-   git clone https://github.com/seu-usuario/distance-calculator-api.git
-   cd distance-calculator-api
-   
 2. Instale as dependências:
 
-   ```bash
+```bash
     npm install
+```
 
-3. Configure a chave da API do Google Maps. Crie um arquivo .env na raiz do projeto e adicione a sua chave da API:
+3. Configure a chave da API do Google Maps. Crie um arquivo .environment.ts na config do projeto e adicione a sua chave da API:
 
-   ```bash
+```bash
     GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+    OPEN_WEATHER_MAP_API_KEY=your_open_weather_map_key
+```
 
 4. Para iniciar o servidor de desenvolvimento:
 
-   ```bash
+```bash
     npm run start:dev
+```
 
 5. Endpoint:
 
 
-   ## Calcular Viagem para calcular a viagem:
+## Calcular Viagem para calcular a viagem:
 
-   ### URL: `/calculate-trip`
-   ## Método: POST
-   ## Body:
+### URL: `/calculate-trip`
+## Método: POST
+## Body:
 
    ```
    {
@@ -68,14 +71,19 @@ Este é um projeto de API utilizando NestJS que calcula a distância, custo de c
    }
    ```
 
-   ## Gerar Link de Mapa:
+## Gerar Link de Mapa:
 
-   ### URL: `/calculate-trip/map-link`
+### URL: `/calculate-trip/map-link`
 
-   ## Método: GET
-   
-   ## Parâmetros:
-   
-   #### origin: Local de origem
-   #### destination: Local de destino
-   #### apiKey: Chave da API do Google Maps
+## Método: GET
+
+## Parâmetros:
+
+   ```
+     "origin": "Local de origem",
+     "destination": "Local de destino",
+   ```
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
